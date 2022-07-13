@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue@next"></script>
+  <div id="root"></div>
+</body>
+<script>
+// watch 侦听器
+// watchEffect 侦听器，偏向于effect
+const app = Vue.createApp({
+ template:`<div>
+              <div>Name:<input v-model="name"/></div>
+              <div>age:<input v-model="age"/></div>
+          </div>`,
+
+  setup(props,context){
+    const {ref, watch,reactive,wtachEffect,toRefs} = Vue;
+    const name = ref('dell');
+    const nameObj = reactive({name:'lee'})
+    // 具备一定的惰性lazy（首次不会执行监听）
+    // 参数可以拿到原始与当前值
+    watch(name,(currentValue,prevValue)=>{
+      console.log(currentValue,prevValue)
+    })
+
+    watch(()=>nameObj.name,(currentValue,prevValue)=>{
+      console.log(currentValue,prevValue)
+    })
+
+    // 立即执行，没有惰性，是immediate
+    // 不需要传递你要侦听的内容，自动会感知代码依赖，不需要传递很多参数，只要传递一个回调函数
+    // 不能获取之前数据的值
+    wtachEffect(()=>{
+      console.log(nameObj.name)
+    })
+
+    // 停止侦听器的写法
+    const stop =  wtachEffect(()=>{
+      console.log(nameObj.name)
+      setTimeout(() => {
+        stop()
+      }, 2000);
+    })
+
+    return {
+      name,nameObj
+    }
+  }
+
+})
+const vm = app.mount("#root")
+</script>
+</html>

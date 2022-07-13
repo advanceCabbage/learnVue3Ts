@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue@next"></script>
+  <div id="root"></div>
+</body>
+<script>
+  // 生命周期函数
+const app = Vue.createApp({
+  template:`<div> {{name}} </div>`,
+  // beforeMount => onBeforeMount
+  // mounted => onMounted
+  // beforeUpdate => onBeforeUpdate
+  // updated => onUpdated
+  // beforeMounte => onBeforeUnmount
+  // unmounted => onUnmounted
+  // setup的执行时间在beforeCreated之前，Vue3已经删除了beforeCreated和created执行时间
+  // 新增加的生命周期函数 
+  // onRenderTracked 每次渲染后重新收集响应式依赖
+  // onRenderTriggered 每次触发页面重新渲染时自动执行 
+  setup(props,context){
+    const { onBeforeMount,onMounted,onBeforeUpdate ,onUpdated } = Vue;
+    const name = ref('dell')
+    onBeforeMount(()=>{
+      console.log('onBeforeMount')
+    })
+
+    onMounted(()=>{
+      console.log('onMounted')
+    })
+
+    onBeforeUpdate(()=>{
+      console.log('onBeforeUpdate')
+    })
+    
+    return { name }
+  }
+})
+const vm = app.mount("#root")
+</script>
+</html>
