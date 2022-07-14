@@ -153,3 +153,16 @@ app.component('counter',{
   app.use(myPlugin,{name:'dell'})
 ```
 
+### Vue3更好的支持TS
+- Vue3源码通过TS编写
+- Vue3写的组件通过defineComponent组件包裹，使得写在defineComponent里面的函数具有提示语类型推断
+### 通过修改Vue3的写法更好的支持Treeshaking
+- 通过导出的方式引入需要使用的属性，例如 
+```
+  // vue3的写法
+  import Vue,{nextTick} from 'vue';
+  // vue2的写法
+  import Vue from 'vue';
+  Vue.nextTick(()=>{});// vue2中nextTick是无论是否使用直接挂载到Vue上的，无法通过treeshaking判断是否使用
+```
+
