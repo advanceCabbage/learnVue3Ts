@@ -2,43 +2,39 @@
   <div class="container">
     <global-header :user="currentUser"></global-header>
     <!-- <ColumnList :list="list"></ColumnList> -->
-    <form>
+    <validate-from @form-submit="onFormSubmit">
       <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-          v-model="emailRef.val"
-          @blur="validateEmail"
-        />
-        <div id="emailHelp" class="form-text" v-if="emailRef.error">
-          {{ emailRef.message }}
-        </div>
+        <label class="form-label">邮箱地址</label>
+        <validate-input
+          :rules="emailRules"
+          v-model="emailValue"
+          placeholder="请输入邮箱地址"
+          type="text"
+        ></validate-input>
+        {{ emailValue }}
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-        />
+        <label class="form-label">密码</label>
+        <validate-input
+          :rules="passwordRules"
+          v-model="passwordValue"
+        ></validate-input>
+        {{ passwordValue }}
       </div>
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+      <template #submit>
+        <span class="btn btn-danger">Submit</span>
+      </template>
+    </validate-from>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ColumnList, { CloumnProps } from "./components/ColumnList.vue";
 import GlobalHeader, { UserProps } from "./components/GlobalHeader.vue";
+import ValidateInput, { RulesProp } from "./components/ValidateInput.vue";
+import ValidateFrom from "./components/ValidateFrom.vue";
 
 const testData: CloumnProps[] = [
   {
@@ -79,8 +75,31 @@ export default defineComponent({
   components: {
     // ColumnList,
     GlobalHeader,
+    ValidateInput,
+    ValidateFrom,
   },
   setup() {
+    const inputRef = ref("");
+    const emailValue = ref("");
+    const passwordValue = ref("");
+    const emailRules: RulesProp = [
+      {
+        type: "required",
+        message: "电子邮箱地址不能为空",
+      },
+      {
+        type: "email",
+        message: "请输入正确的电子邮箱格式",
+      },
+    ];
+
+    const passwordRules: RulesProp = [
+      {
+        type: "required",
+        message: "密码不能为空",
+      },
+    ];
+
     const emailRef = reactive({
       val: "",
       error: false,
@@ -95,11 +114,21 @@ export default defineComponent({
         emailRef.message = "should be vaild emial";
       }
     };
+
+    const onFormSubmit = (result: boolean) => {
+      console.log("result", result);
+    };
     return {
       list: testData,
       currentUser,
       emailRef,
       validateEmail,
+      emailRules,
+      passwordRules,
+      emailValue,
+      passwordValue,
+      onFormSubmit,
+      inputRef,
     };
   },
 });
