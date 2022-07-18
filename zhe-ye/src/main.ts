@@ -1,9 +1,9 @@
 import { createApp } from "vue";
-import axios from "axios";
+import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import axios from "axios";
 
-import App from "./App.vue";
 axios.defaults.baseURL = "http://localhost:7001/api/";
 axios.interceptors.request.use((config) => {
   store.commit("setLoading", true);
@@ -25,7 +25,4 @@ axios.interceptors.response.use(
     return Promise.reject(e.response.data);
   }
 );
-const app = createApp(App);
-app.use(router);
-app.use(store);
-app.mount("#app");
+createApp(App).use(store).use(router).mount("#app");
