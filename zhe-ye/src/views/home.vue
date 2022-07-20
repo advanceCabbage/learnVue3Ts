@@ -13,6 +13,7 @@
     </section>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
     <column-list :list="list"></column-list>
+    <create-post></create-post>
     <button
       class="btn btn-outline-primary mt-2 mb-5 mx-auto btn-block w-25"
       @click="loadMorePage"
@@ -29,11 +30,13 @@ import { useStore } from "vuex";
 import { GlobalDataProps } from "../store";
 import useLoadMore from "../hooks/useLoadMore";
 import ColumnList from "../components/ColumnList.vue";
+import CreatePost from "../views/createPost.vue";
 
 export default defineComponent({
   name: "Home-page",
   components: {
     ColumnList,
+    CreatePost,
   },
   setup() {
     const store = useStore<GlobalDataProps>();

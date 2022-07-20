@@ -72,16 +72,18 @@ export default defineComponent({
   },
   setup() {
     const uploadedData = ref();
-    const titleVal = ref("");
-    const router = useRouter();
+    // const titleVal = ref("");
+    // const router = useRouter();
     const route = useRoute();
-    const isEditMode = !!route.query.id;
+    console.log(route);
+    const isEditMode = !!route?.query?.id;
+    //const isEditMode = false;
     const store = useStore<GlobalDataProps>();
     let imageId = "";
     // const titleRules: RulesProp = [
     //   { type: "required", message: "文章标题不能为空" },
     // ];
-    const contentVal = ref("");
+    // const contentVal = ref("");
     // const contentRules: RulesProp = [
     //   { type: "required", message: "文章详情不能为空" },
     // ];
@@ -94,8 +96,8 @@ export default defineComponent({
             if (currentPost.image) {
               uploadedData.value = { data: currentPost.image };
             }
-            titleVal.value = currentPost.title;
-            contentVal.value = currentPost.content || "";
+            // titleVal.value = currentPost.title;
+            // contentVal.value = currentPost.content || "";
           });
       }
     });
@@ -104,35 +106,35 @@ export default defineComponent({
         imageId = rawData.data._id;
       }
     };
-    const onFormSubmit = (result: boolean) => {
-      if (result) {
-        const { column, _id } = store.state.user;
-        if (column) {
-          const newPost: PostProps = {
-            title: titleVal.value,
-            content: contentVal.value,
-            column,
-            author: _id,
-          };
-          if (imageId) {
-            newPost.image = imageId;
-          }
-          const actionName = isEditMode ? "updatePost" : "createPost";
-          const sendData = isEditMode
-            ? {
-                id: route.query.id,
-                payload: newPost,
-              }
-            : newPost;
-          store.dispatch(actionName, sendData).then(() => {
-            createMessage("发表成功，2秒后跳转到文章", "success", 2000);
-            setTimeout(() => {
-              router.push({ name: "column", params: { id: column } });
-            }, 2000);
-          });
-        }
-      }
-    };
+    // const onFormSubmit = (result: boolean) => {
+    //   if (result) {
+    //     const { column, _id } = store.state.user;
+    //     if (column) {
+    //       const newPost: PostProps = {
+    //         title: titleVal.value,
+    //         content: contentVal.value,
+    //         column,
+    //         author: _id,
+    //       };
+    //       if (imageId) {
+    //         newPost.image = imageId;
+    //       }
+    //       const actionName = isEditMode ? "updatePost" : "createPost";
+    //       const sendData = isEditMode
+    //         ? {
+    //             id: route.query.id,
+    //             payload: newPost,
+    //           }
+    //         : newPost;
+    //       store.dispatch(actionName, sendData).then(() => {
+    //         createMessage("发表成功，2秒后跳转到文章", "success", 2000);
+    //         setTimeout(() => {
+    //           router.push({ name: "column", params: { id: column } });
+    //         }, 2000);
+    //       });
+    //     }
+    //   }
+    // };
     const uploadCheck = (file: File) => {
       const result = beforeUploadCheck(file, {
         format: ["image/jpeg", "image/png"],
@@ -149,10 +151,10 @@ export default defineComponent({
     };
     return {
       //titleRules,
-      titleVal,
-      contentVal,
+      //titleVal,
+      //  contentVal,
       //contentRules,
-      onFormSubmit,
+      //onFormSubmit,
       uploadCheck,
       handleFileUploaded,
       uploadedData,

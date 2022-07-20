@@ -30,21 +30,25 @@ it(`
 
   const ValidateInputComponentWrapper = shallowMount(ValidateInput, {
     attrs: {
-      placeholder: "请输入邮箱地址",
+      placeholder: "请输入邮箱地址12",
     },
   });
   expect(
     ValidateInputComponentWrapper.find("input").attributes("placeholder")
-  ).toBe("请输入邮箱地址"); //* 子组件类'form-control'元素上有爷爷组件中传递下来的属性
+  ).toBe("请输入邮箱地址12"); //* 子组件类'form-control'元素上有爷爷组件中传递下来的属性
 });
 
-it(`1.input失去焦点，校验函数被调用`, () => {
+it(`1.input失去焦点，校验函数被调用`, async () => {
   const wrapper = mount(ValidateInput);
+  const mockFn = jest.fn();
+  wrapper.vm.validateInput = mockFn;
   wrapper.find("input").trigger("blur");
-  expect(wrapper.vm.validateInput.toBeCalled); //* 失去焦点，触发校验事件
+  expect(mockFn).toBeCalled(); //* 失去焦点，触发校验事件
 
-  wrapper.find("input").trigger("change");
-  expect(wrapper.vm.updataValue.toBeCalled); //* 失去焦点，触发校验事件
+  const mockFn2 = jest.fn();
+  wrapper.vm.updataValue = mockFn2;
+  await wrapper.find("input").setValue("test");
+  expect(mockFn2).toBeCalled(); //* 失去焦点，触发校验事件
 });
 
 it(`1.卸载ValidateFrom组件`, () => {
